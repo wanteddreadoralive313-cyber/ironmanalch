@@ -7,8 +7,10 @@ import com.megabot.managers.BankingManager;
 import com.megabot.managers.NavigationManager;
 import com.megabot.managers.RecoveryManager;
 import com.megabot.managers.SessionManager;
+import com.megabot.modules.fishing.FishingTask;
 import com.megabot.modules.smithing.SmithingTask;
 import com.megabot.modules.utility.IdleTask;
+import com.megabot.modules.woodcutting.WoodcuttingTask;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
@@ -40,6 +42,11 @@ public class MegaAioScript extends AbstractScript {
         sessionManager.startSession();
 
         Area varrockAnvil = new Area(3184, 3427, 3194, 3415);
+        Area draynorTrees = new Area(3080, 3226, 3089, 3233);
+        Area lumbridgeFishing = new Area(3238, 3243, 3247, 3254);
+
+        taskEngine.addTask(new WoodcuttingTask(draynorTrees, "Willow", "Rune axe", 125));
+        taskEngine.addTask(new FishingTask(lumbridgeFishing, "Fishing spot", "Net", "Small fishing net", 150));
         taskEngine.addTask(new SmithingTask(varrockAnvil, "Mithril bar", "Platebody", 5, 100));
         taskEngine.addTask(new IdleTask(1000L * 60 * 5));
 
@@ -59,6 +66,8 @@ public class MegaAioScript extends AbstractScript {
         if (context.getRecoveryManager().isPlayerStuck()) {
             context.getRecoveryManager().recoverFromStuck();
         }
+
+        context.getSessionManager().endBreakIfReady();
 
         int delay = taskEngine.tick(context);
         return Math.max(delay, 300);
