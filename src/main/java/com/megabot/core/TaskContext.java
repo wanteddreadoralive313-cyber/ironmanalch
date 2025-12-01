@@ -2,6 +2,7 @@ package com.megabot.core;
 
 import com.megabot.managers.AntiBanEngine;
 import com.megabot.managers.BankingManager;
+import com.megabot.managers.InventoryManager;
 import com.megabot.managers.NavigationManager;
 import com.megabot.managers.RecoveryManager;
 import com.megabot.managers.SessionManager;
@@ -15,6 +16,7 @@ public class TaskContext {
     private final AntiBanEngine antiBanEngine;
     private final NavigationManager navigationManager;
     private final BankingManager bankingManager;
+    private final InventoryManager inventoryManager;
     private final SessionManager sessionManager;
     private final RecoveryManager recoveryManager;
 
@@ -23,6 +25,7 @@ public class TaskContext {
             AntiBanEngine antiBanEngine,
             NavigationManager navigationManager,
             BankingManager bankingManager,
+            InventoryManager inventoryManager,
             SessionManager sessionManager,
             RecoveryManager recoveryManager
     ) {
@@ -30,6 +33,7 @@ public class TaskContext {
         this.antiBanEngine = antiBanEngine;
         this.navigationManager = navigationManager;
         this.bankingManager = bankingManager;
+        this.inventoryManager = inventoryManager;
         this.sessionManager = sessionManager;
         this.recoveryManager = recoveryManager;
     }
@@ -48,6 +52,10 @@ public class TaskContext {
 
     public BankingManager getBankingManager() {
         return bankingManager;
+    }
+
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 
     public SessionManager getSessionManager() {

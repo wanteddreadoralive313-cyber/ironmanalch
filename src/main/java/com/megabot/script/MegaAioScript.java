@@ -4,10 +4,13 @@ import com.megabot.core.TaskContext;
 import com.megabot.core.TaskEngine;
 import com.megabot.managers.AntiBanEngine;
 import com.megabot.managers.BankingManager;
+import com.megabot.managers.InventoryManager;
 import com.megabot.managers.NavigationManager;
 import com.megabot.managers.RecoveryManager;
 import com.megabot.managers.SessionManager;
+import com.megabot.modules.fishing.FishingTask;
 import com.megabot.modules.smithing.SmithingTask;
+import com.megabot.modules.woodcutting.WoodcuttingTask;
 import com.megabot.modules.utility.IdleTask;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.script.AbstractScript;
@@ -26,6 +29,7 @@ public class MegaAioScript extends AbstractScript {
         AntiBanEngine antiBanEngine = new AntiBanEngine(AntiBanEngine.BehaviorProfile.balanced());
         NavigationManager navigationManager = new NavigationManager();
         BankingManager bankingManager = new BankingManager(navigationManager);
+        InventoryManager inventoryManager = new InventoryManager();
         SessionManager sessionManager = new SessionManager(new SessionManager.SessionPlan(
                 1000L * 60 * 120, // 2 hours daily window
                 1000L * 60 * 4,
@@ -36,11 +40,25 @@ public class MegaAioScript extends AbstractScript {
         RecoveryManager recoveryManager = new RecoveryManager();
 
         taskEngine = new TaskEngine();
-        context = new TaskContext(this, antiBanEngine, navigationManager, bankingManager, sessionManager, recoveryManager);
+        context = new TaskContext(
+                this,
+                antiBanEngine,
+                navigationManager,
+                bankingManager,
+                inventoryManager,
+                sessionManager,
+                recoveryManager
+        );
         sessionManager.startSession();
 
         Area varrockAnvil = new Area(3184, 3427, 3194, 3415);
         taskEngine.addTask(new SmithingTask(varrockAnvil, "Mithril bar", "Platebody", 5, 100));
+        Area draynorWillows = new Area(3090, 3240, 3098, 3233);
+        taskEngine.addTask(new WoodcuttingTask(draynorWillows, "Willow", "Willow logs", "Axe", true, 120));
+
+        Area lumbridgeFishing = new Area(3221, 3144, 3235, 3134);
+        taskEngine.addTask(new FishingTask(lumbridgeFishing, "Fishing spot", "Net", "Raw shrimps", "Small fishing net", true, 150));
+
         taskEngine.addTask(new IdleTask(1000L * 60 * 5));
 
         Logger.log("Configured " + taskEngine.getTasks().size() + " task(s)");
