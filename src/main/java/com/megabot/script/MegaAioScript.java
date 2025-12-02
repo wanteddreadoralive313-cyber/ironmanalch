@@ -26,7 +26,8 @@ public class MegaAioScript extends AbstractScript {
     public void onStart() {
         Logger.log("Mega AIO starting up...");
         AntiBanEngine antiBanEngine = new AntiBanEngine(AntiBanEngine.BehaviorProfile.balanced());
-        NavigationManager navigationManager = new NavigationManager();
+        RecoveryManager recoveryManager = new RecoveryManager();
+        NavigationManager navigationManager = new NavigationManager(recoveryManager);
         BankingManager bankingManager = new BankingManager(navigationManager);
         SessionManager sessionManager = new SessionManager(new SessionManager.SessionPlan(
                 1000L * 60 * 120, // 2 hours daily window
@@ -35,7 +36,6 @@ public class MegaAioScript extends AbstractScript {
                 1000L * 20,
                 1000L * 40
         ));
-        RecoveryManager recoveryManager = new RecoveryManager();
 
         taskEngine = new TaskEngine();
         context = new TaskContext(this, antiBanEngine, navigationManager, bankingManager, sessionManager, recoveryManager);
